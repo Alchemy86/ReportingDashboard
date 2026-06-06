@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm view *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git ls-tree *)",
+      "Bash(git rebase *)",
+      "Bash(git stash *)",
+      "Bash(git symbolic-ref *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+# Build / dependency output
+/dist
+/node_modules
+/.angular
+/coverage
+
+# Playwright artifacts
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
+# Lockfiles & generated
+package-lock.json
