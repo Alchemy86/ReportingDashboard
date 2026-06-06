@@ -1,0 +1,28 @@
+<dialog
+  #dialogEl
+  class="modal"
+  tabindex="0"
+  (close)="onNativeClose()"
+  (click)="onBackdropClick($event)"
+  (keydown)="onDialogKeydown($event)"
+>
+  <div class="modal__panel" role="document">
+    <!-- Header -->
+    <header class="modal__header">
+      @if (title()) {
+        <h2 class="modal__title">{{ title() }}</h2>
+      }
+      <button type="button" class="modal__close" (click)="close()" aria-label="Close modal">
+        <lucide-icon [img]="icons.X" [size]="18" [strokeWidth]="2.5" />
+      </button>
+    </header>
+
+    <!-- Body — consumer provides content here -->
+    <div class="modal__body">
+      <ng-content />
+    </div>
+
+    <!-- Optional footer slot -->
+    <ng-content select="[modal-footer]" />
+  </div>
+</dialog>

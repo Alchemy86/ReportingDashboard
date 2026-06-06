@@ -1,0 +1,215 @@
+<div class="dt-container">
+  <!-- ── Search bar ─────────────────────────────────────────────────────── -->
+  @if (!config().hideSearch) {
+    <div class="dt-header">
+      <div class="dt-search">
+        <lucide-icon
+          [img]="icons.Search"
+          class="dt-search__icon"
+          aria-hidden="true"
+          [size]="16"
+          [strokeWidth]="2"
+        ></lucide-icon>
+        <input
+          class="dt-search__input"
+          type="search"
+          [placeholder]="config().searchPlaceholder ?? 'Search…'"
+          autocomplete="off"
+          (input)="onSearch($event)"
+        />
+      </div>
+    </div>
+  }
+
+  <!-- ── Table ──────────────────────────────────────────────────────────── -->
+  <div class="dt-table-wrapper">
+    <table class="dt-table" [class]="config().tableClass">
+      <thead>
+        <tr>
+          @for (col of columns(); track col.key) {
+            <th
+              class="dt-th"
+              [class.dt-th--sortable]="col.sortable"
+              [class.dt-th--sorted-asc]="
+                sortState()?.column === col.key && sortState()?.direction === 'asc'
+              "
+              [class.dt-th--sorted-desc]="
+                sortState()?.column === col.key && sortState()?.direction === 'desc'
+              "
+              [style.width]="col.width"
+              [style.text-align]="col.align ?? 'left'"
+              (click)="col.sortable && sort(col.key)"
+            >
+              {{ col.title }}
+              @if (col.sortable) {
+                <span class="dt-sort-icon" aria-hidden="true">
+                  @if (sortState()?.column === col.key && sortState()?.direction === 'asc') {
+                    <lucide-icon
+                      [img]="icons.ArrowUp"
+                      [size]="14"
+                      [strokeWidth]="2.5"
+                    ></lucide-icon>
+                  } @else if (
+                    sortState()?.column === col.key && sortState()?.direction === 'desc'
+                  ) {
+                    <lucide-icon
+                      [img]="icons.ArrowDown"
+                      [size]="14"
+                      [strokeWidth]="2.5"
+                    ></lucide-icon>
+                  } @else {
+                    <lucide-icon
+                      [img]="icons.ChevronsUpDown"
+                      class="dt-sort-icon--inactive"
+                      [size]="14"
+                      [strokeWidth]="2"
+                    ></lucide-icon>
+                  }
+                </span>
+              }
+            </th>
+          }
+          @if (hasActions()) {
+            <th class="dt-th dt-th--actions">Actions</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (pagedData().length === 0) {
+          <tr>
+            <td [attr.colspan]="colSpan()" class="dt-empty">
+              {{ config().emptyMessage ?? 'No records found.' }}
+            </td>
+          </tr>
+        } @else {
+          @for (row of pagedData(); track trackRow(row, $index)) {
+            <tr class="dt-row">
+              @for (col of columns(); track col.key) {
+                <td
+                  class="dt-td"
+                  [class]="col.className"
+                  [style.text-align]="col.align ?? 'left'"
+                  [innerHTML]="getCellValue(row, col)"
+                ></td>
+              }
+              @if (hasActions()) {
+                <td class="dt-td dt-td--actions">
+                  <div class="dt-actions">
+                    @for (action of getVisibleActions(row); track action.id) {
+                      <button
+                        type="button"
+                        [class]="action.className ?? 'dt-action-btn'"
+                        [title]="action.label"
+                        [attr.aria-label]="action.label"
+                        (click)="onAction(action.id, row)"
+                      >
+                        @if (action.imageSrc) {
+                          <img
+                            class="dt-action-btn__img"
+                            [src]="action.imageSrc"
+                            [alt]="action.imageAlt || action.label"
+                            loading="lazy"
+                          />
+                        } @else if (action.icon) {
+                          <i [class]="action.icon" aria-hidden="true"></i>
+                        } @else {
+                          <span class="dt-action-btn__text">{{ action.label }}</span>
+                        }
+                      </button>
+                    }
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Footer: info + pagination ──────────────────────────────────────── -->
+  <div class="dt-footer">
+    <p class="dt-footer__info">
+      @if (totalItems() > 0) {
+        Showing <strong>{{ pageStart() }}</strong
+        >–<strong>{{ pageEnd() }}</strong> of <strong>{{ totalItems() }}</strong>
+      } @else {
+        No records
+      }
+    </p>
+
+    <div class="dt-footer__controls">
+      <label class="dt-page-size">
+        <span class="dt-page-size__label">Rows</span>
+        <select
+          class="dt-page-size__select"
+          (change)="onPageSizeChange($event)"
+          [value]="pageSize()"
+        >
+          @for (size of pageSizeOptions(); track size) {
+            <option [value]="size">{{ size }}</option>
+          }
+        </select>
+      </label>
+
+      <nav class="dt-pagination" aria-label="Pagination">
+        <button
+          class="dt-page-btn"
+          type="button"
+          [disabled]="currentPage() === 1"
+          (click)="goToPage(1)"
+          aria-label="First page"
+        >
+          «
+        </button>
+
+        <button
+          class="dt-page-btn"
+          type="button"
+          [disabled]="currentPage() === 1"
+          (click)="goToPage(currentPage() - 1)"
+          aria-label="Previous page"
+        >
+          ‹
+        </button>
+
+        @for (page of pageNumbers(); track $index) {
+          @if (page === null) {
+            <span class="dt-page-ellipsis" aria-hidden="true">…</span>
+          } @else {
+            <button
+              class="dt-page-btn"
+              type="button"
+              [class.dt-page-btn--active]="page === currentPage()"
+              [attr.aria-current]="page === currentPage() ? 'page' : null"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        }
+
+        <button
+          class="dt-page-btn"
+          type="button"
+          [disabled]="currentPage() === totalPages()"
+          (click)="goToPage(currentPage() + 1)"
+          aria-label="Next page"
+        >
+          ›
+        </button>
+
+        <button
+          class="dt-page-btn"
+          type="button"
+          [disabled]="currentPage() === totalPages()"
+          (click)="goToPage(totalPages())"
+          aria-label="Last page"
+        >
+          »
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>

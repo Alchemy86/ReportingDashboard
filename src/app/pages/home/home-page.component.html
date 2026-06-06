@@ -1,0 +1,58 @@
+<section class="mb-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+  <p class="text-sm font-medium text-slate-500">Reports generated</p>
+  <p data-testid="report-count" class="mt-1 text-4xl font-bold tabular-nums">
+    {{ store.reportCount() }}
+  </p>
+  <button
+    type="button"
+    class="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+    (click)="store.addReport()"
+  >
+    Add report
+  </button>
+</section>
+
+<section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+  <h2 class="mb-4 text-base font-semibold text-slate-700">All Reports</h2>
+  <app-data-table
+    [data]="reports()"
+    [columns]="columns"
+    [actions]="actions"
+    [config]="tableConfig"
+    (actionEvent)="onTableAction($event)"
+  />
+</section>
+
+<app-modal
+  [isOpen]="isReportModalOpen()"
+  [title]="selectedReport()?.name ?? ''"
+  (closed)="closeReportModal()"
+>
+  @if (selectedReport(); as report) {
+    <div class="report-card">
+      <div class="report-card__status-row">
+        <span [class]="statusClass[report.status]">{{ report.status }}</span>
+        <span class="report-card__id">ID #{{ report.id }}</span>
+      </div>
+
+      <dl class="report-card__grid">
+        <div class="report-card__field">
+          <dt>Owner</dt>
+          <dd>{{ report.owner }}</dd>
+        </div>
+        <div class="report-card__field">
+          <dt>Created</dt>
+          <dd>{{ report.createdAt }}</dd>
+        </div>
+        <div class="report-card__field report-card__field--full">
+          <dt>Records</dt>
+          <dd class="report-card__records">{{ report.records.toLocaleString() }}</dd>
+        </div>
+      </dl>
+    </div>
+  }
+
+  <div modal-footer>
+    <button type="button" class="app-btn app-btn--ghost" (click)="closeReportModal()">Close</button>
+  </div>
+</app-modal>

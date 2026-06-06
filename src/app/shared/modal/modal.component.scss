@@ -1,0 +1,116 @@
+// ── Reset & base ──────────────────────────────────────────────────────────────
+.modal {
+  // Remove browser defaults
+  border: none;
+  padding: 0;
+  background: transparent;
+  // Prevent the dialog itself from clipping the box-shadow on the panel
+  overflow: visible;
+  // Centre horizontally and vertically
+  margin: auto;
+  // Limit max width/height
+  max-width: min(640px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 4rem);
+  width: 100%;
+
+  // ── Backdrop ───────────────────────────────────────────────────────────────
+  &::backdrop {
+    background: rgb(0 0 0 / 45%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
+  // ── Open/close animation ───────────────────────────────────────────────────
+  &[open] {
+    animation: modal-in 0.2s ease both;
+  }
+
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+// ── Panel (the visible card) ──────────────────────────────────────────────────
+.modal__panel {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 8%),
+    0 20px 40px -8px rgb(0 0 0 / 18%);
+  overflow: hidden;
+  max-height: calc(100dvh - 4rem);
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.125rem 1.375rem;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+  }
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+.modal__body {
+  padding: 1.375rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+// ── Footer (optional slot) ────────────────────────────────────────────────────
+[modal-footer] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.625rem;
+  padding: 1rem 1.375rem;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}

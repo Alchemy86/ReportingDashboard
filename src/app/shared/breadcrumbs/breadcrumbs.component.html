@@ -1,0 +1,15 @@
+<nav class="crumbs" aria-label="Breadcrumb">
+  <ol class="crumbs__list">
+    @for (item of breadcrumbs(); track item.label + '-' + ($index || 0); let isLast = $last) {
+      <li class="crumbs__item">
+        @if (isLink(item, isLast)) {
+          <a class="crumbs__link" [routerLink]="item.url">{{ item.label }}</a>
+        } @else {
+          <span class="crumbs__text" [attr.aria-current]="isLast ? 'page' : null">{{
+            item.label
+          }}</span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

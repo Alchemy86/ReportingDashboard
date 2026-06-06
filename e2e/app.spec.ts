@@ -8,5 +8,5 @@ test('renders the dashboard shell', async ({ page }) => {
 test('increments the report count via the SignalStore (zoneless)', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Add report' }).click();
-  await expect(page.getByText('1', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('report-count')).toHaveText('1');
 });
