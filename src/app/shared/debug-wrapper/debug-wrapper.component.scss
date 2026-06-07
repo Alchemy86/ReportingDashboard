@@ -1,0 +1,33 @@
+.debug-wrapper {
+  margin-top: 1.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  overflow: hidden;
+
+  &__header {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
+    background: #020617;
+    border-bottom: 1px solid #1e293b;
+  }
+
+  &__content {
+    margin: 0;
+    padding: 0.875rem;
+    max-height: 20rem;
+    overflow: auto;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+      monospace;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}

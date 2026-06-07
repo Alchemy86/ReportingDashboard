@@ -1,0 +1,82 @@
+.connect-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+}
+
+.connect-page__card {
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.connect-page__header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.connect-page__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  border-radius: 0.5rem;
+}
+
+.connect-page__logo-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #ffffff;
+}
+
+.connect-page__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.connect-page__subtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.connect-page__form {
+  margin-bottom: 1.5rem;
+}
+
+.connect-page__info {
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.connect-page__info-text {
+  font-size: 0.8125rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .connect-page {
+    padding: 1rem;
+  }
+
+  .connect-page__card {
+    padding: 1.5rem;
+  }
+}

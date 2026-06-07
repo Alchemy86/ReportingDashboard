@@ -358,3 +358,34 @@ $dt-transition: 0.15s ease;
     display: none;
   }
 }
+
+// ── Badges ─────────────────────────────────────────────────────────────────────
+.dt-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  line-height: 1;
+
+  &--green {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+
+  &--amber {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  &--red {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+
+  &--slate {
+    background-color: #f1f5f9;
+    color: #475569;
+  }
+}

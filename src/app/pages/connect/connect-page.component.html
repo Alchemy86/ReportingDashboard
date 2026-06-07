@@ -1,0 +1,37 @@
+<div class="connect-page">
+  <div class="connect-page__card">
+    <div class="connect-page__header">
+      <div class="connect-page__logo">
+        <svg
+          class="connect-page__logo-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 3v18h18" />
+          <path d="M7 14l4-4 3 3 5-6" />
+        </svg>
+      </div>
+      <h1 class="connect-page__title">Connect to Notify</h1>
+      <p class="connect-page__subtitle">
+        Enter your Notify API key to access the incident dashboard
+      </p>
+    </div>
+
+    <div class="connect-page__form">
+      <app-token-form [value]="currentToken()" (save)="onSave($event)" (clear)="onClear()" />
+    </div>
+
+    <div class="connect-page__info">
+      <p class="connect-page__info-text">
+        Your API key is stored locally in your browser and is never sent to our servers.
+      </p>
+      <p class="connect-page__info-text">
+        Don't have an API key? Contact your Notify administrator.
+      </p>
+    </div>
+  </div>
+</div>

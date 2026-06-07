@@ -1,0 +1,123 @@
+.msd {
+  position: relative;
+  width: 100%;
+
+  &__trigger {
+    width: 100%;
+    min-height: 2.625rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.625rem;
+    padding: 0.4rem 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    background: #ffffff;
+    color: #0f172a;
+    text-align: left;
+    transition: border-color 0.15s ease;
+
+    &:hover,
+    &--open {
+      border-color: #94a3b8;
+    }
+  }
+
+  &__placeholder {
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    background: #e2e8f0;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    color: #0f172a;
+  }
+
+  &__chip-remove {
+    border: none;
+    background: transparent;
+    color: #334155;
+    padding: 0;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  &__chevron {
+    color: #64748b;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    padding: 0.6rem;
+  }
+
+  &__search {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__options {
+    max-height: 11rem;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__option {
+    border: none;
+    border-radius: 0.5rem;
+    background: #f8fafc;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &:hover {
+      background: #e2e8f0;
+    }
+
+    &--selected {
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+  }
+
+  &__empty {
+    margin: 0;
+    padding: 0.5rem;
+    color: #64748b;
+    font-size: 0.8125rem;
+  }
+}

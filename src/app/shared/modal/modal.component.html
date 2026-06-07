@@ -1,12 +1,13 @@
 <dialog
   #dialogEl
   class="modal"
+  [class.modal--side]="variant() === 'side'"
   tabindex="0"
   (close)="onNativeClose()"
   (click)="onBackdropClick($event)"
   (keydown)="onDialogKeydown($event)"
 >
-  <div class="modal__panel" role="document">
+  <div class="modal__panel" [class.modal__panel--side]="variant() === 'side'" role="document">
     <!-- Header -->
     <header class="modal__header">
       @if (title()) {

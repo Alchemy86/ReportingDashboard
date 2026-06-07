@@ -26,6 +26,13 @@ export class ModalComponent {
   /** Optional heading shown in the modal header. */
   readonly title = input<string>('');
 
+  /**
+   * Presentation mode for the modal container.
+   * `center` keeps the current centered dialog behavior.
+   * `side` renders a right-side slide-out drawer.
+   */
+  readonly variant = input<'center' | 'side'>('center');
+
   // ── Outputs ────────────────────────────────────────────────────────────────
 
   /**

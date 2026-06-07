@@ -11,6 +11,8 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ArrowDown, ArrowUp, ChevronsUpDown, LucideAngularModule, Search } from 'lucide-angular';
 import { debounceTime } from 'rxjs/operators';
 
+import { DebugWrapperComponent } from '@shared/debug-wrapper/debug-wrapper.component';
+
 import {
   SortState,
   TableAction,
@@ -25,7 +27,7 @@ import {
   styleUrl: './data-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, DebugWrapperComponent],
 })
 export class DataTableComponent {
   protected readonly icons = { Search, ArrowUp, ArrowDown, ChevronsUpDown };
@@ -55,6 +57,9 @@ export class DataTableComponent {
 
   /** Fires when any action button is clicked. */
   readonly actionEvent = output<TableActionEvent>();
+
+  /** Fires when a row is clicked. Emits the full row data. */
+  readonly rowClick = output<unknown>();
 
   // ── Internal search state ──────────────────────────────────────────────────
 
@@ -165,6 +170,26 @@ export class DataTableComponent {
     pages.push(total);
     return pages;
   });
+
+  // ── Computed: debug snapshot ───────────────────────────────────────────────
+
+  /** JSON view of the table's current state and filtered rows, shown in dev. */
+  readonly debugSnapshot = computed(() =>
+    JSON.stringify(
+      {
+        searchQuery: this.searchQuery(),
+        sortState: this.sortState(),
+        currentPage: this.currentPage(),
+        pageSize: this.pageSize(),
+        totalItems: this.totalItems(),
+        sourceCount: this.data().length,
+        filteredCount: this.filteredData().length,
+        filteredData: this.filteredData(),
+      },
+      null,
+      2,
+    ),
+  );
 
   // ── Effects: keep page in sync ─────────────────────────────────────────────
 

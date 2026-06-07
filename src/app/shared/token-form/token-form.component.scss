@@ -1,0 +1,78 @@
+.token-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.token-form__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.token-form__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.token-form__input {
+  width: 100%;
+  padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  color: #0f172a;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &::placeholder {
+    color: #94a3b8;
+  }
+}
+
+.token-form__toggle-btn {
+  position: absolute;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  background: none;
+  border: none;
+  border-radius: 0.25rem;
+  color: #64748b;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    color: #334155;
+    background-color: #f1f5f9;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+}
+
+.token-form__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.token-form__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}

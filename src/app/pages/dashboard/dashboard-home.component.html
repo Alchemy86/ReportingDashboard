@@ -1,0 +1,165 @@
+@if (store.loading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="text-center">
+      <div
+        class="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600 mx-auto"
+      ></div>
+      <p class="text-sm text-slate-500">Loading incident data...</p>
+    </div>
+  </div>
+} @else if (store.error()) {
+  <div class="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+    <p class="text-sm font-medium text-red-800">{{ store.error() }}</p>
+  </div>
+} @else {
+  <section class="mb-6 flex justify-end">
+    <label
+      class="flex items-center gap-2 text-sm font-medium text-slate-600"
+      for="dashboard-period"
+    >
+      Timeframe
+      <select
+        id="dashboard-period"
+        class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        [(ngModel)]="selectedPeriod"
+        (change)="onPeriodChange(selectedPeriod())"
+      >
+        @for (option of periodOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+  </section>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <button
+      type="button"
+      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
+      (click)="onOpenIncidentsClick()"
+    >
+      <p class="text-sm font-medium text-slate-500">Open Incidents</p>
+      <p class="mt-1 text-4xl font-bold tabular-nums text-slate-900">
+        {{ store.cards().openCount }}
+      </p>
+    </button>
+    <button
+      type="button"
+      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
+      (click)="onHighPriorityClick()"
+    >
+      <p class="text-sm font-medium text-slate-500">High Priority</p>
+      <p class="mt-1 text-4xl font-bold tabular-nums text-red-600">
+        {{ store.cards().openHighPriority }}
+      </p>
+    </button>
+    <button
+      type="button"
+      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
+      (click)="onPeriodCardClick()"
+    >
+      <p class="text-sm font-medium text-slate-500">{{ store.selectedPeriodLabel() }}</p>
+      <p class="mt-1 text-4xl font-bold tabular-nums text-slate-900">
+        {{ store.cards().selectedPeriodTotal }}
+      </p>
+    </button>
+    <button
+      type="button"
+      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
+      (click)="onReportableClick()"
+    >
+      <p class="text-sm font-medium text-slate-500">Reportable</p>
+      <p class="mt-1 text-4xl font-bold tabular-nums text-slate-900">
+        {{ store.cards().reportableTotal }}
+      </p>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-4 text-base font-semibold text-slate-700">Open Incidents by Severity</h2>
+      <div class="h-96 w-full">
+        <ngx-charts-advanced-pie-chart
+          [results]="store.severityData()"
+          [gradient]="false"
+          (select)="onSeverityClick($event)"
+        >
+        </ngx-charts-advanced-pie-chart>
+      </div>
+    </div>
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-4 text-base font-semibold text-slate-700">
+        Incidents by Type ({{ store.selectedPeriodLabel() }})
+      </h2>
+      <div class="h-96 w-full">
+        <ngx-charts-bar-vertical
+          [results]="store.typeData()"
+          [xAxis]="true"
+          [yAxis]="true"
+          [showXAxisLabel]="false"
+          [showYAxisLabel]="false"
+          [gradient]="false"
+          [xAxisTickFormatting]="formatTypeLabel"
+          (select)="onTypeClick($event)"
+        >
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+  </div>
+
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="mb-4 text-base font-semibold text-slate-700">Open Incidents</h2>
+    <app-data-table
+      [data]="store.openIncidents()"
+      [columns]="columns"
+      [config]="tableConfig"
+      (rowClick)="onSelectIncident($event)"
+    />
+  </section>
+
+  @if (selectedIncident(); as incident) {
+    <app-modal
+      [isOpen]="true"
+      [variant]="'side'"
+      [title]="'Incident #' + incident.incidentNumber"
+      (closed)="closeDetail()"
+    >
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-slate-500">Type</p>
+          <p class="text-sm text-slate-900">{{ incident.incidentType?.name || 'Unspecified' }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Priority</p>
+          <p
+            class="text-sm text-slate-900"
+            [innerHTML]="renderPriorityBadge(incident.priorityName)"
+          ></p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Status</p>
+          <p class="text-sm text-slate-900">{{ incident.statusName || 'Unknown' }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Reported Date</p>
+          <p class="text-sm text-slate-900">{{ formatDate(incident.reportDateTime) }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Category</p>
+          <p class="text-sm text-slate-900">{{ incident.incidentCategory || 'Unspecified' }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Assignee</p>
+          <p class="text-sm text-slate-900">{{ incident.assignedToFullName || 'Unassigned' }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Reportable</p>
+          <p class="text-sm text-slate-900">{{ incident.isReportable ? 'Yes' : 'No' }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Lost Time</p>
+          <p class="text-sm text-slate-900">{{ incident.isLostTime ? 'Yes' : 'No' }}</p>
+        </div>
+      </div>
+    </app-modal>
+  }
+}

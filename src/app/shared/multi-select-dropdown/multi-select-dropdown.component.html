@@ -1,0 +1,62 @@
+<div class="msd">
+  <button
+    type="button"
+    class="msd__trigger"
+    [attr.aria-expanded]="isOpen()"
+    [class.msd__trigger--open]="isOpen()"
+    (click)="toggleMenu()"
+  >
+    @if (selectedChips().length > 0) {
+      <span class="msd__chips">
+        @for (chip of selectedChips(); track chip.id) {
+          <span class="msd__chip">
+            {{ chip.label }}
+            <button
+              type="button"
+              class="msd__chip-remove"
+              (click)="removeSelection(chip.id, $event)"
+              aria-label="Remove selection"
+            >
+              x
+            </button>
+          </span>
+        }
+      </span>
+    } @else {
+      <span class="msd__placeholder">{{ label() }}</span>
+    }
+    <span class="msd__chevron" aria-hidden="true">▾</span>
+  </button>
+
+  @if (isOpen()) {
+    <div class="msd__menu" role="listbox">
+      <input
+        type="text"
+        class="msd__search"
+        [value]="filterText()"
+        placeholder="Filter options"
+        (input)="onFilterInput($event)"
+      />
+
+      <div class="msd__options">
+        @if (filteredOptions().length === 0) {
+          <p class="msd__empty">No results</p>
+        } @else {
+          @for (option of filteredOptions(); track option.id) {
+            <button
+              type="button"
+              class="msd__option"
+              [class.msd__option--selected]="isSelected(option.id)"
+              (click)="toggleOption(option.id)"
+            >
+              <span>{{ option.label }}</span>
+              @if (isSelected(option.id)) {
+                <span aria-hidden="true">✓</span>
+              }
+            </button>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

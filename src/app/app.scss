@@ -1,0 +1,17 @@
+.token-modal {
+  padding: 1.5rem;
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+}

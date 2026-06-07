@@ -1,0 +1,67 @@
+<div class="fp">
+  <!-- Trigger button -->
+  <button
+    type="button"
+    class="fp__trigger"
+    [class.fp__trigger--active]="activeCount() > 0"
+    [attr.aria-expanded]="isOpen()"
+    (click)="togglePanel()"
+  >
+    <svg
+      class="fp__icon"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      aria-hidden="true"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h14M6 10h8M9 15h2" />
+    </svg>
+    Filter
+    @if (activeCount() > 0) {
+      <span class="fp__badge">{{ activeCount() }}</span>
+    }
+    <svg
+      class="fp__chevron"
+      [class.fp__chevron--open]="isOpen()"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </button>
+
+  <!-- Dropdown panel -->
+  @if (isOpen()) {
+    <div class="fp__panel" role="dialog" aria-label="Filter options">
+      <p class="fp__panel-title">Filter Options</p>
+
+      <div class="fp__fields">
+        @for (field of resolvedFields(); track field.key) {
+          <div class="fp__field">
+            <span class="fp__label">{{ field.label }}</span>
+            <app-multi-select-dropdown
+              [options]="field.resolvedOptions"
+              [singleSelectMode]="field.singleSelect ?? false"
+              [selectedValues]="draftMap()[field.key] ?? []"
+              [label]="'All ' + field.label.toLowerCase()"
+              (selectedValuesChange)="setDraft(field.key, $event)"
+            />
+          </div>
+        }
+      </div>
+
+      <div class="fp__actions">
+        <button type="button" class="fp__btn fp__btn--ghost" (click)="resetFilters()">Reset</button>
+        <button type="button" class="fp__btn fp__btn--primary" (click)="applyFilters()">
+          Apply
+        </button>
+      </div>
+    </div>
+  }
+</div>

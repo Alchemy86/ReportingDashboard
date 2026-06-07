@@ -84,7 +84,7 @@
           </tr>
         } @else {
           @for (row of pagedData(); track trackRow(row, $index)) {
-            <tr class="dt-row">
+            <tr class="dt-row" (click)="rowClick.emit(row)">
               @for (col of columns(); track col.key) {
                 <td
                   class="dt-td"
@@ -94,7 +94,7 @@
                 ></td>
               }
               @if (hasActions()) {
-                <td class="dt-td dt-td--actions">
+                <td class="dt-td dt-td--actions" (click)="$event.stopPropagation()">
                   <div class="dt-actions">
                     @for (action of getVisibleActions(row); track action.id) {
                       <button
@@ -145,10 +145,10 @@
         <select
           class="dt-page-size__select"
           (change)="onPageSizeChange($event)"
-          [value]="pageSize()"
+          [value]="'' + pageSize()"
         >
           @for (size of pageSizeOptions(); track size) {
-            <option [value]="size">{{ size }}</option>
+            <option [value]="'' + size" [selected]="size === pageSize()">{{ size }}</option>
           }
         </select>
       </label>
@@ -212,4 +212,9 @@
       </nav>
     </div>
   </div>
+
+  <!-- ── Debug snapshot (dev only) ──────────────────────────────────────── -->
+  <app-debug-wrapper title="Data Table Debug Snapshot">
+    {{ debugSnapshot() }}
+  </app-debug-wrapper>
 </div>
