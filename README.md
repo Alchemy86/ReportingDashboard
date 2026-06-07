@@ -2,7 +2,6 @@
 
 <img width="1962" height="1912" alt="image" src="https://github.com/user-attachments/assets/811e2e84-7014-4347-92d8-68ea9fcdc079" />
 
-
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.14.
 
 # Future Features
@@ -30,6 +29,10 @@ Allow the data to be exported from the site.
 # Caching and performance
 
 Test speed, do a producion build and performance test it.
+
+# Polling and auto refresh - with browser alerts
+
+Set the page to poll for new records and alert if new records come through.
 
 ## Development server
 
