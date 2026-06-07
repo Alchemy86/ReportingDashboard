@@ -2,6 +2,32 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.14.
 
+# Future Features
+
+## Authentication
+
+Wrap the site in proper authentication instead of just behind a token and auth guard.
+
+# Over-Time Line Charts:
+
+Instead of just a static bar chart of the last 90 days, a line or stacked bar chart showing incidents grouped by month or by week would help identify seasonal trends or sudden spikes.
+
+# Retry Policy
+
+No real network error handling as it stands. Add a built in retry policy for failed network requests.
+
+# CI/CD pipelines
+
+Create release pipelines.
+
+# Download options
+
+Allow the data to be exported from the site.
+
+# Caching and performance
+
+Test speed, do a producion build and performance test it.
+
 ## Development server
 
 To start a local development server, run:
