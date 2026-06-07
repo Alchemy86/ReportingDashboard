@@ -54,9 +54,13 @@ export class ModalComponent {
     effect(() => {
       const dialog = this.dialogEl().nativeElement;
       if (this.isOpen()) {
-        if (!dialog.open) dialog.showModal();
+        if (!dialog.open && typeof dialog.showModal === 'function') {
+          dialog.showModal();
+        }
       } else {
-        if (dialog.open) dialog.close();
+        if (dialog.open && typeof dialog.close === 'function') {
+          dialog.close();
+        }
       }
     });
   }
