@@ -1,5 +1,5 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ApiTokenService } from '@core/notify/api-token.service';
 import { BreadcrumbsComponent } from '@shared/breadcrumbs/breadcrumbs.component';
 import { DebugService } from '@shared/debug/debug.service';
@@ -8,7 +8,7 @@ import { TokenFormComponent } from '@shared/token-form/token-form.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, BreadcrumbsComponent, ModalComponent, TokenFormComponent],
+  imports: [RouterOutlet, BreadcrumbsComponent, ModalComponent, TokenFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',

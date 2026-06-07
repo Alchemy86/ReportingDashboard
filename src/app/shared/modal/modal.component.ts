@@ -70,8 +70,6 @@ export class ModalComponent {
   /** Close via the header button. */
   close(): void {
     this.dialogEl().nativeElement.close();
-    // `onNativeClose` will also fire but emitting twice is safe —
-    // parent just sets signal to false.
   }
 
   // ── Template event handlers ────────────────────────────────────────────────

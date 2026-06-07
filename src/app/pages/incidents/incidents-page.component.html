@@ -79,6 +79,13 @@
           <p class="text-sm text-slate-900">{{ incident.isLostTime ? 'Yes' : 'No' }}</p>
         </div>
       </div>
+
+      <app-debug-wrapper>
+        <div class="debug-info">
+          <p><strong>Debug Info:</strong></p>
+          <pre>{{ incident | json }}</pre>
+        </div>
+      </app-debug-wrapper>
     </app-modal>
   }
 }

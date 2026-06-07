@@ -1,3 +1,4 @@
+import { JsonPipe } from '@angular/common';
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { IncidentsStore } from '@core/notify/incidents.store';
 import { IncidentSimpleSummaryModel, PeriodReportedName } from '@core/notify/notify.models';
 import { DataTableComponent } from '@shared/data-table/data-table.component';
 import { TableColumn, TableConfig } from '@shared/data-table/data-table.types';
+import { DebugWrapperComponent } from '@shared/debug-wrapper/debug-wrapper.component';
 import { DebugService } from '@shared/debug/debug.service';
 import { ModalComponent } from '@shared/modal/modal.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -12,7 +14,14 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 @Component({
   selector: 'app-dashboard-home',
   standalone: true,
-  imports: [DataTableComponent, NgxChartsModule, ModalComponent, FormsModule],
+  imports: [
+    DataTableComponent,
+    NgxChartsModule,
+    ModalComponent,
+    FormsModule,
+    DebugWrapperComponent,
+    JsonPipe,
+  ],
   templateUrl: './dashboard-home.component.html',
   styleUrl: './dashboard-home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

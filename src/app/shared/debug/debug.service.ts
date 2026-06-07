@@ -54,9 +54,5 @@ export class DebugService {
     window.debugService = this;
     window.toggleDebug = (state?: boolean) => this.toggle(state);
     window.setDebug = (state: boolean) => this.set(state);
-
-    if (this._isDevBuild) {
-      console.info('Debug API ready: use toggleDebug() or setDebug(true|false).');
-    }
   }
 }

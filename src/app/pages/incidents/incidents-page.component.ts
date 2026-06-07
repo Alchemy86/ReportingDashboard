@@ -1,22 +1,30 @@
+import { JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
-
 import { NotifyApiService } from '@core/notify/notify-api.service';
 import { IncidentSimpleSummaryModel, PeriodReportedName } from '@core/notify/notify.models';
 import { DataTableComponent } from '@shared/data-table/data-table.component';
+import { ModalComponent } from '@shared/modal/modal.component';
+import { firstValueFrom } from 'rxjs';
+
 import { TableColumn, TableConfig } from '@shared/data-table/data-table.types';
+import { DebugWrapperComponent } from '@shared/debug-wrapper/debug-wrapper.component';
 import {
   ActiveFilters,
   FilterFieldConfig,
   FilterPanelComponent,
 } from '@shared/filter-panel/filter-panel.component';
-import { ModalComponent } from '@shared/modal/modal.component';
 
 @Component({
   selector: 'app-incidents-page',
   standalone: true,
-  imports: [DataTableComponent, FilterPanelComponent, ModalComponent],
+  imports: [
+    DataTableComponent,
+    FilterPanelComponent,
+    ModalComponent,
+    DebugWrapperComponent,
+    JsonPipe,
+  ],
   templateUrl: './incidents-page.component.html',
   styleUrl: './incidents-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,6 +103,12 @@ export class IncidentsPageComponent {
         this.uniqueOptions(
           (rows as IncidentSimpleSummaryModel[]).map((r) => r.incidentType?.name ?? 'Unspecified'),
         ),
+      singleSelect: true,
+    },
+    {
+      key: 'reportable',
+      label: 'Reportable',
+      options: [{ id: 'true', label: 'Yes' }],
       singleSelect: true,
     },
   ];
