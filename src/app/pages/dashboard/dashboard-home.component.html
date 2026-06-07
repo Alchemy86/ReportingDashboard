@@ -35,7 +35,7 @@
     <button
       type="button"
       class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
-      (click)="onOpenIncidentsClick()"
+      (click)="onCardClick(undefined, 'Open')"
     >
       <p class="text-sm font-medium text-slate-500">Open Incidents</p>
       <p class="mt-1 text-4xl font-bold tabular-nums text-slate-900">
@@ -45,32 +45,70 @@
     <button
       type="button"
       class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
-      (click)="onHighPriorityClick()"
+      (click)="onCardClick('High', 'Open')"
     >
       <p class="text-sm font-medium text-slate-500">High Priority</p>
       <p class="mt-1 text-4xl font-bold tabular-nums text-red-600">
         {{ store.cards().openHighPriority }}
       </p>
+      @if (store.trends().highPriority !== null && store.trendLabel()) {
+        <p
+          class="mt-2 text-xs font-medium"
+          [class.text-green-600]="store.trends().highPriority! < 0"
+          [class.text-red-500]="store.trends().highPriority! > 0"
+          [class.text-slate-400]="store.trends().highPriority === 0"
+        >
+          {{
+            store.trends().highPriority! > 0 ? '▲' : store.trends().highPriority! < 0 ? '▼' : '—'
+          }}
+          {{ store.trends().highPriority! > 0 ? '+' : '' }}{{ store.trends().highPriority }}%
+          {{ store.trendLabel() }}
+        </p>
+      }
     </button>
     <button
       type="button"
       class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
-      (click)="onPeriodCardClick()"
+      (click)="onCardClick()"
     >
       <p class="text-sm font-medium text-slate-500">{{ store.selectedPeriodLabel() }}</p>
       <p class="mt-1 text-4xl font-bold tabular-nums text-slate-900">
         {{ store.cards().selectedPeriodTotal }}
       </p>
+      @if (store.trends().total !== null && store.trendLabel()) {
+        <p
+          class="mt-2 text-xs font-medium"
+          [class.text-green-600]="store.trends().total! < 0"
+          [class.text-red-500]="store.trends().total! > 0"
+          [class.text-slate-400]="store.trends().total === 0"
+        >
+          {{ store.trends().total! > 0 ? '▲' : store.trends().total! < 0 ? '▼' : '—' }}
+          {{ store.trends().total! > 0 ? '+' : '' }}{{ store.trends().total }}%
+          {{ store.trendLabel() }}
+        </p>
+      }
     </button>
     <button
       type="button"
       class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-300 transition-all text-left w-full"
-      (click)="onReportableClick()"
+      (click)="onCardClick()"
     >
       <p class="text-sm font-medium text-slate-500">Reportable</p>
       <p class="mt-1 text-4xl font-bold tabular-nums text-slate-900">
         {{ store.cards().reportableTotal }}
       </p>
+      @if (store.trends().reportable !== null && store.trendLabel()) {
+        <p
+          class="mt-2 text-xs font-medium"
+          [class.text-green-600]="store.trends().reportable! < 0"
+          [class.text-red-500]="store.trends().reportable! > 0"
+          [class.text-slate-400]="store.trends().reportable === 0"
+        >
+          {{ store.trends().reportable! > 0 ? '▲' : store.trends().reportable! < 0 ? '▼' : '—' }}
+          {{ store.trends().reportable! > 0 ? '+' : '' }}{{ store.trends().reportable }}%
+          {{ store.trendLabel() }}
+        </p>
+      }
     </button>
   </div>
 
@@ -81,7 +119,7 @@
         <ngx-charts-advanced-pie-chart
           [results]="store.severityData()"
           [gradient]="false"
-          (select)="onSeverityClick($event)"
+          (select)="onCardClick($event.name)"
         >
         </ngx-charts-advanced-pie-chart>
       </div>

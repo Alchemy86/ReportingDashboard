@@ -20,6 +20,7 @@ interface IncidentsState {
   loaded: boolean;
   selectedPeriod: PeriodReportedName;
   statistics: IncidentStatisticsModel | null;
+  prevStatistics: IncidentStatisticsModel | null;
   openIncidents: IncidentSimpleSummaryModel[];
 }
 
@@ -29,7 +30,21 @@ const initialState: IncidentsState = {
   loaded: false,
   selectedPeriod: 'Last90Days',
   statistics: null,
+  prevStatistics: null,
   openIncidents: [],
+};
+
+/**
+ * Maps each period to the best comparable previous period for trend calculation.
+ * Only periods where a meaningful 1:1 or same-length comparison exists are listed.
+ */
+const PREV_PERIOD_MAP: Partial<Record<PeriodReportedName, PeriodReportedName>> = {
+  Last30Days: 'LastCalendarMonth',
+  Last90Days: 'LastQuarter',
+  ThisMonth: 'LastCalendarMonth',
+  ThisCalendarYear: 'LastCalendarYear',
+  ThisFinancialYear: 'LastFinancialYear',
+  Rolling12Months: 'LastCalendarYear',
 };
 
 /** Display order for severities; anything unknown falls through to the end. */
@@ -57,7 +72,7 @@ const PERIOD_LABELS: Record<PeriodReportedName, string> = {
 export const IncidentsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(({ openIncidents, selectedPeriod, statistics }) => ({
+  withComputed(({ openIncidents, selectedPeriod, statistics, prevStatistics }) => ({
     /** Open incidents grouped by priority/severity, for the pie chart. */
     severityData: computed<ChartDatum[]>(() => {
       const counts = new Map<string, number>();
@@ -90,6 +105,30 @@ export const IncidentsStore = signalStore(
         reportableTotal: stats?.reportableTotal ?? 0,
       };
     }),
+
+    /** Percentage change vs previous comparable period. Null means no comparison available. */
+    trends: computed(() => {
+      const curr = statistics();
+      const prev = prevStatistics();
+      if (!curr || !prev) return { total: null, reportable: null, highPriority: null };
+
+      const pct = (current: number, previous: number): number | null => {
+        if (previous === 0) return null;
+        return Math.round(((current - previous) / previous) * 100);
+      };
+
+      return {
+        total: pct(curr.total, prev.total),
+        reportable: pct(curr.reportableTotal, prev.reportableTotal),
+        highPriority: pct(curr.highPriorityTotal, prev.highPriorityTotal),
+      };
+    }),
+
+    /** Label for the comparison period, e.g. "vs Last Quarter". Null if no comparison. */
+    trendLabel: computed(() => {
+      const prev = PREV_PERIOD_MAP[selectedPeriod()];
+      return prev ? `vs ${PERIOD_LABELS[prev]}` : null;
+    }),
   })),
   withMethods((store) => {
     const api = inject(NotifyApiService);
@@ -100,13 +139,21 @@ export const IncidentsStore = signalStore(
           return;
         }
         const period = store.selectedPeriod();
+        const prevPeriod = PREV_PERIOD_MAP[period] ?? null;
         patchState(store, { loading: true, error: null });
         try {
-          const [statistics, openIncidents] = await Promise.all([
+          const [statistics, openIncidents, prevStatistics] = await Promise.all([
             firstValueFrom(api.getStatistics(period)),
             firstValueFrom(api.getOpenIncidents(period)),
+            prevPeriod ? firstValueFrom(api.getStatistics(prevPeriod)) : Promise.resolve(null),
           ]);
-          patchState(store, { statistics, openIncidents, loading: false, loaded: true });
+          patchState(store, {
+            statistics,
+            openIncidents,
+            prevStatistics,
+            loading: false,
+            loaded: true,
+          });
         } catch (err) {
           patchState(store, {
             loading: false,

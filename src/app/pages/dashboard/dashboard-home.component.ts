@@ -5,6 +5,7 @@ import { IncidentsStore } from '@core/notify/incidents.store';
 import { IncidentSimpleSummaryModel, PeriodReportedName } from '@core/notify/notify.models';
 import { DataTableComponent } from '@shared/data-table/data-table.component';
 import { TableColumn, TableConfig } from '@shared/data-table/data-table.types';
+import { DebugService } from '@shared/debug/debug.service';
 import { ModalComponent } from '@shared/modal/modal.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -19,6 +20,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 export class DashboardHomeComponent {
   protected readonly store = inject(IncidentsStore);
   private readonly router = inject(Router);
+  protected readonly debugService = inject(DebugService);
   protected readonly selectedIncident = signal<IncidentSimpleSummaryModel | null>(null);
   protected readonly selectedPeriod = signal<PeriodReportedName>(this.store.selectedPeriod());
 
@@ -100,31 +102,18 @@ export class DashboardHomeComponent {
     return label.length > 15 ? label.substring(0, 12) + '...' : label;
   }
 
-  protected onSeverityClick(data: { name: string; value: number }): void {
-    this.router.navigate(['/dashboard', 'incidents'], { queryParams: { priority: data.name } });
-  }
-
   protected onTypeClick(data: { name: string; value: number }): void {
+    this.debugService.log('Type click', data);
     this.router.navigate(['/dashboard', 'incidents'], { queryParams: { type: data.name } });
   }
 
-  protected onOpenIncidentsClick(): void {
-    this.router.navigate(['/dashboard', 'incidents'], { queryParams: { status: 'Open' } });
-  }
-
-  protected onHighPriorityClick(): void {
+  protected onCardClick(priority?: string, status?: string): void {
+    this.debugService.log('Card click', { priority, status });
     this.router.navigate(['/dashboard', 'incidents'], {
-      queryParams: { priority: 'High', status: 'Open' },
-    });
-  }
-
-  protected onPeriodCardClick(): void {
-    this.router.navigate(['/dashboard', 'incidents'], { queryParams: { status: 'Open' } });
-  }
-
-  protected onReportableClick(): void {
-    this.router.navigate(['/dashboard', 'incidents'], {
-      queryParams: { reportable: 'true', status: 'Open' },
+      queryParams: {
+        priority: priority || undefined,
+        status: status || undefined,
+      },
     });
   }
 
